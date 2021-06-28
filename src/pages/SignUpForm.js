@@ -13,10 +13,9 @@ function SignUp() {
 
   const handleSubmit = async () => {
     const name = formData.get('name');
-    const userName = formData.get('userName');
-    const email = formData.get('email');
+    const username = formData.get('username');
     const password = formData.get('password');
-    const registerResponse = await fetchSignUp(name, email, userName, password);
+    const registerResponse = await fetchSignUp(name, username, password);
     if (registerResponse === 200) history.push('/login'); 
     history.push('/login'); 
   };

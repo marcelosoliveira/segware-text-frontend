@@ -17,9 +17,9 @@ function Login() {
   }, []);
 
   const handleSubmit = async () => {
-    const userName = formData.get('userName');
+    const username = formData.get('username');
     const password = formData.get('password');
-    const loginResponse = await fetchToken(userName, password);
+    const loginResponse = await fetchToken(username, password);
     if (loginResponse) return history.push('/central')
     history.push('/');
   }; 

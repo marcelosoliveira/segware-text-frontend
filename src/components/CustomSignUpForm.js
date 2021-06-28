@@ -20,7 +20,7 @@ const SignUpForm = ({
         fluid
         placeholder="Username"
         value={userName}
-        name="userName"
+        name="username"
         onChange={(e) => onInputChange(e)}
       />
       <Form.Input

@@ -1,23 +1,23 @@
-/* import { saveToken, getToken } from '../helpers/localStorageHelper';
+import axios from 'axios';
+import { saveToken, getToken } from '../helpers/localStorageHelper';
 
-export async function fetchToken(userName, password) {
+export async function fetchToken(username, password) {
     const requestTokenUrl = 'https://localhost:8080/oauth/token';
     // const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
     // const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET;
 
     const request = {  
-        method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Authorization': 'Basic ' + Buffer.from('admin:admin').toString('base64')
         },
         body: 'grant_type=password'
-          + '&username=' + userName
+          + '&username=' + username
           + '&password=' + password,
     };
     console.log(request)
     try {
-        const response = await fetch(requestTokenUrl, request);
+        const response = await axios.post(requestTokenUrl, request);
         const { access_token } = await response.json();
         if (access_token) {
           saveToken(access_token);
@@ -30,24 +30,23 @@ export async function fetchToken(userName, password) {
     }
   }
 
-  export async function fetchSignUp(name, userName, password) {
+  export async function fetchSignUp(name, username, password) {
     const signUpNewUserUrl = 'https://localhost:8080/api/v1/user';
 
     const request = {  
-        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          "name": name,
-          "username": userName,
-          "password": password
-      })
+        body: {
+          name,
+          username,
+          password
+      }
     };
     console.log(request)
     try {
-        const response = await fetch(signUpNewUserUrl, request);
-        if (response.status === 200) {
+        const response = await axios.post(signUpNewUserUrl, request);
+        if (response.status === 201) {
           return response.status;
         } else {
           alert('Erro no cadastro!')
@@ -78,9 +77,9 @@ export async function fetchToken(userName, password) {
     }catch(error) {
         console.error(error);
     }
-  }  */
+  } 
 
-  import axios from 'axios';
+ /*  import axios from 'axios';
   import { saveToken } from '../helpers/localStorage';
   export default async function fetchToken(username, password) {
     const requestUserUrl = 'https://localhost:8080/oauth/token';
@@ -103,4 +102,4 @@ export async function fetchToken(userName, password) {
       console.error(error);
       return error.message;
     }
-  }
+  } */
