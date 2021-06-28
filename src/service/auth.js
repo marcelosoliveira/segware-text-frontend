@@ -2,57 +2,49 @@ import axios from 'axios';
 import { saveToken, getToken } from '../helpers/localStorageHelper';
 
 export async function fetchToken(username, password) {
-    const requestTokenUrl = 'https://localhost:8080/oauth/token';
+    const requestTokenUrl = 'http://localhost:8080/oauth/token';
     // const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
     // const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET;
 
-    const request = {  
+    const requestHeader = {  
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Basic ' + Buffer.from('admin:admin').toString('base64')
+          authorization: 'Basic ' + Buffer.from('admin:admin').toString('base64')
         },
         body: 'grant_type=password'
           + '&username=' + username
           + '&password=' + password,
     };
-    console.log(request)
+
+    console.log(requestHeader);
+
     try {
-        const response = await axios.post(requestTokenUrl, request);
+        const response = await axios.post(requestTokenUrl, requestHeader);
         const { access_token } = await response.json();
-        if (access_token) {
           saveToken(access_token);
           return access_token;
-        } else {
-          alert('Usuário ou senha inválidos!')
-        }
     }catch(error) {
-        console.error(error);
+      const { data } = error.response;
+        if (error) return alert(data.message);
     }
   }
 
   export async function fetchSignUp(name, username, password) {
-    const signUpNewUserUrl = 'https://localhost:8080/api/v1/user';
+    const signUpNewUserUrl = 'http://localhost:8080/api/v1/user';
 
-    const request = {  
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: {
+    const requestBody = { 
           name,
           username,
           password
-      }
     };
-    console.log(request)
+
+    console.log(requestBody)
+  
     try {
-        const response = await axios.post(signUpNewUserUrl, request);
-        if (response.status === 201) {
-          return response.status;
-        } else {
-          alert('Erro no cadastro!')
-        }
+      const response = await axios.post(signUpNewUserUrl, requestBody);
+      return response.status;
     }catch(error) {
-        console.error(error);
+      const { data } = error.response;
+      if (error) return alert(data.message);
     }
   }
 
