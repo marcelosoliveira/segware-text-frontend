@@ -3,7 +3,7 @@ import React from 'react';
 import { Button, Form, Segment } from 'semantic-ui-react';
 
 const SignUpForm = ({
-  formData: { name, userName, email, password },
+  formData: { name, userName, password },
   onInputChange,
   onHandleSubmit,
 }) => (

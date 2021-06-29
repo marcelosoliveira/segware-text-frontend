@@ -23,8 +23,9 @@ try {
     saveToken(access_token);
     return access_token;
   }catch(error) {
+    if (!error.response) return alert("Internal server error! Code: 500");
     const { data } = error.response;
-      if (error) return alert(data.message);
+    if (error) return alert(data.message);
   }
 }
 
@@ -43,6 +44,7 @@ export async function fetchSignUp(name, username, password) {
     const response = await axios.post(signUpNewUserUrl, requestBody);
     return response.status;
   }catch(error) {
+    if (!error.response) return alert("Internal server error! Code: 500");
     const { data } = error.response;
     if (error) return alert(data.message);
   }
@@ -92,9 +94,35 @@ export async function fetchUpVotes() {
     if (error) return alert('Invalid token or list not found!');
   };
 
-} 
+}
 
- /*  import axios from 'axios';
+export async function fetchPostInit(text) {
+  const baseUrl = `http://localhost:8080/api/v1/post`;
+  const token = getToken();
+
+  console.log("TOKEN=" + token);
+
+  const request = {  
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    },
+    body: {
+      text,
+    }
+  };
+
+  try {
+    const response = await fetch(baseUrl, request);
+      return response.json();
+  }catch(error) {
+    if (error) return alert('Invalid token or list not found!');
+  };
+
+}
+
+ /* import axios from 'axios';
   import { saveToken } from '../helpers/localStorage';
   export default async function fetchToken(username, password) {
     const requestUserUrl = 'https://localhost:8080/oauth/token';
