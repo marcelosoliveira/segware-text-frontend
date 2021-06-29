@@ -6,7 +6,7 @@ import { Grid } from 'semantic-ui-react';
 import { Link, useHistory } from 'react-router-dom';
 import { fetchSignUp } from '../service/auth';
 
-function SignUp() {
+export default function SignUp() {
   
   const [formData, setFormData] = useState(new Map());
   const history = useHistory();
@@ -46,6 +46,3 @@ function SignUp() {
       </Grid>
     );
 }
-
-
-export default (SignUp);

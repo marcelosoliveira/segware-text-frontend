@@ -6,7 +6,7 @@ import CustomHeader from '../components/CustomHeader';
 import { fetchToken } from '../service/auth';
 import  CustomMessage from '../components/CustomMessage';
 
-function Login() {
+export default function Login() {
   const history = useHistory();
   const [formData, setFormData] = useState(new Map());
 
@@ -20,7 +20,7 @@ function Login() {
     const username = formData.get('username');
     const password = formData.get('password');
     const loginResponse = await fetchToken(username, password);
-    if (loginResponse) return history.push('/central')
+    if (loginResponse) return history.push('/home')
     history.push('/');
   }; 
 
@@ -45,5 +45,3 @@ function Login() {
       </Grid>
     );
   }
-
-export default Login;
