@@ -21,7 +21,7 @@ export default function Login() {
     const password = formData.get('password');
     const loginResponse = await fetchToken(username, password);
     if (loginResponse) return history.push('/home')
-    history.push('/');
+    //history.push('/');
   }; 
 
     return (

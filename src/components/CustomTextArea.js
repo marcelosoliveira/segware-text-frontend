@@ -10,10 +10,10 @@ const CustomTextArea = ({
   <Form size="large">
     <Segment stacked>
     <Form.TextArea
-        fluid
+        fluid="true"
         placeholder="Write a post"
         value={text}
-        name="name"
+        name="text"
         onChange={(e) => onInputChange(e)}
       />
 

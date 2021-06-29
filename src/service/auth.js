@@ -15,17 +15,16 @@ export async function fetchToken(username, password) {
       + '&password=' + password,
   };
 
-console.log(request);
-
-try {
-  const response = await fetch(requestTokenUrl, request);
-  const { access_token } = await response.json();
+  try {
+    const response = await fetch(requestTokenUrl, request);
+    const { access_token } = await response.json();
+    if (!access_token) return alert("No Username or Invalid Password!")
     saveToken(access_token);
     return access_token;
   }catch(error) {
     if (!error.response) return alert("Internal server error! Code: 500");
     const { data } = error.response;
-    if (error) return alert(data.message);
+    if (error) alert(data);
   }
 }
 
@@ -37,24 +36,28 @@ export async function fetchSignUp(name, username, password) {
     username,
     password
   };
-
-  console.log(requestBody)
   
   try {
     const response = await axios.post(signUpNewUserUrl, requestBody);
+    console.log(response)
+    const { data: { message } } = response
+    alert(message);
     return response.status;
+    
   }catch(error) {
     if (!error.response) return alert("Internal server error! Code: 500");
-    const { data } = error.response;
-    if (error) return alert(data.message);
+    const { data: { fields } } = error.response;
+    if (error) {
+      fields.forEach(({ name, message }) => {
+        alert(name + " > " + message );
+      });
+    }
   }
 }
 
 export async function fetchAllPost() {
   const baseUrl = `http://localhost:8080/api/v1/post`;
   const token = getToken();
-
-  console.log("TOKEN=" + token);
 
   const request = {  
     method: 'GET',
@@ -77,8 +80,6 @@ export async function fetchUpVotes() {
   const baseUrl = `http://localhost:8080/api/v1/userUpVotes`;
   const token = getToken();
 
-  console.log("TOKEN=" + token);
-
   const request = {  
     method: 'GET',
     headers: {
@@ -99,25 +100,33 @@ export async function fetchUpVotes() {
 export async function fetchPostInit(text) {
   const baseUrl = `http://localhost:8080/api/v1/post`;
   const token = getToken();
-
-  console.log("TOKEN=" + token);
-
-  const request = {  
-    method: 'POST',
+console.log("TOKEN = " + token)
+  const requestHeaders = {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + token
     },
-    body: {
-      text,
-    }
   };
+  
+  const requestBody = {
+    text,
+  }
 
   try {
-    const response = await fetch(baseUrl, request);
-      return response.json();
+    const response = await axios.post(baseUrl, requestBody, requestHeaders);
+    alert(response.data.message);
   }catch(error) {
-    if (error) return alert('Invalid token or list not found!');
+    if (!error.response) return alert('Invalid token or list not found!');
+    const { data } = error.response;
+
+    if (!data.fields) return alert(data.title)
+    console.log(error.response)
+
+    if (error) {
+      data.fields.forEach(({ name, message }) => {
+        alert(name + " > " + message );
+      });
+    }
   };
 
 }

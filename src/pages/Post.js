@@ -14,9 +14,8 @@ export default function Post() {
 
   const handleSubmit = async () => {
     const text = postData.get('text');
-    const registerResponse = await fetchPostInit(text);
-    if (registerResponse === 201) alert("Post created successfully"); 
-    history.push('/home'); 
+    await fetchPostInit(text);
+    history.push('/home')
   };
 
   const handleInputChange = useCallback(({ target: { name, value } }) => {
