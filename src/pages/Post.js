@@ -5,6 +5,7 @@ import CustomMessage from '../components/CustomMessage';
 import CustomTextArea from '../components/CustomTextArea';
 import CustomHeader from '../components/CustomHeader'
 import { fetchPostInit } from '../service/auth';
+import { getToken } from '../helpers/localStorageHelper';
 
 
 export default function Post() {
@@ -12,26 +13,28 @@ export default function Post() {
   const [postData, setPostData] = useState(new Map());
   const history = useHistory();
 
-  const handleSubmit = async () => {
-    const text = postData.get('text');
-    await fetchPostInit(text);
-    history.push('/home')
-  };
-
   const handleInputChange = useCallback(({ target: { name, value } }) => {
     setPostData(prevState => {
       return new Map(prevState).set(name, value);
     });
   }, []);
 
+  if (!getToken()) return history.push("/login")
+
+  const handleSubmit = async () => {
+    const text = postData.get('text');
+    await fetchPostInit(text);
+    history.push('/home')
+  };
+
   return (
-    <div>
+    <div className="ui raised very padded text container segment">
       <CustomMessage>
         <Link to="/home">Back to posts</Link>
       </CustomMessage>
       <Grid
         textAlign="center"
-        style={{ height: '100vh' }}
+        style={{ height: '70vh' }}
         verticalAlign="middle"
       >
         <Grid.Column style={{ maxWidth: 450 }}>
