@@ -3,11 +3,9 @@ import { fetchUpVotes, fetchPostVotes } from '../service/auth';
 import { Grid } from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
 
-const CustomHome = ({ id, text, author, upCount, downCount, createdAt }) => {
+const CustomHome = ({ id, text, author, upCount, downCount, createdAt, updateCount }) => {
   const[votes, setVotes] = useState([]);
-  const[countUp, setCountUp] = useState(0);
-  const[countDown, setCountDown] = useState(0);
-  const[handler, setHandler] = useState(true);
+  const[handler, setHandler] = useState(false);
   
   const upVotes = async () => {
   const data = await fetchUpVotes();
@@ -15,23 +13,19 @@ const CustomHome = ({ id, text, author, upCount, downCount, createdAt }) => {
   }
 
   useEffect(() => {
-    if (upCount === 0 && downCount === 0) setHandler(true);
-    setCountDown(downCount);
-    setCountUp(upCount)
+    /* if (upCount === 0 && downCount === 0)  */setHandler(true);
     upVotes();
-  }, [upCount, downCount]);
+  }, []);
 
   const handlerClickUp = async (postId) => {
-    setCountUp(countUp + 1)
-    setCountDown(countDown > 0 ? countDown - 1 : 0)
     await fetchPostVotes(postId, "up");
+    updateCount();
     upVotes();
   };
 
   const handlerClickDown = async(postId) => {
-    setCountUp(countUp > 0 ? countUp - 1 : 0)
-    setCountDown(countDown + 1)
     await fetchPostVotes(postId, "down");
+    updateCount();
     upVotes();
 };
 
@@ -84,7 +78,7 @@ const CustomHome = ({ id, text, author, upCount, downCount, createdAt }) => {
         <span 
           style={{ fontSize: 20, marginRight: 40, fontWeight: 600 }}
         >
-          { countUp }
+          { upCount }
         </span>
 
         { votes.map(({ id: idVote, postId, downVotes: down, upVotes: up }) => (
@@ -116,7 +110,7 @@ const CustomHome = ({ id, text, author, upCount, downCount, createdAt }) => {
         <span
           style={{ fontSize: 20, fontWeight: 600 }}
         >
-          { countDown }
+          { downCount }
         </span>
 {/*         <i class="thumbs down icon"></i>
         <i class="thumbs down outline icon"></i>

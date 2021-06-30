@@ -56,6 +56,7 @@ export default function Home() {
             upCount={upCount}
             downCount={downCount}
             createdAt={createdAt}
+            updateCount={allPost}
           />
           
         </div>
