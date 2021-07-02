@@ -1,15 +1,21 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext, useEffect } from 'react';
 import  CustomMessage from '../components/CustomMessage';
 import  CustomHeader from '../components/CustomHeader';
 import  CustomSignUpForm from '../components/CustomSignUpForm';
 import { Grid } from 'semantic-ui-react';
 import { Link, useHistory } from 'react-router-dom';
 import { fetchSignUp } from '../service/auth';
+import PostContext from '../context/PostContext';
 
 export default function SignUp() {
-  
+  const { loading, setLoading } = useContext(PostContext);
   const [formData, setFormData] = useState(new Map());
   const history = useHistory();
+
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => setLoading(false), 1000);
+  }, []);
 
   const handleSubmit = async () => {
     const name = formData.get('name');
@@ -24,6 +30,19 @@ export default function SignUp() {
       return new Map(prevState).set(name, value);
     });
   }, []);
+
+  if (loading) {
+    return (
+    <div
+      style= {{ height: 500 }}
+      className="ui segment"
+    >
+      <div className="ui active inverted dimmer">
+        <div className="ui large text loader">Loading</div>
+      </div>
+    </div>
+    );
+  }    
 
     return (
       <Grid

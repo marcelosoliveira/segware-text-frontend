@@ -46,9 +46,12 @@ export async function fetchSignUp(name, username, password) {
     
   }catch(error) {
     if (!error.response) return alert("Internal server error! Code: 500");
-    const { data: { fields } } = error.response;
+    const { data } = error.response;
+
+    if (!data.fields) return alert(data.title)
+
     if (error) {
-      fields.forEach(({ name, message }) => {
+      data.fields.forEach(({ name, message }) => {
         alert(name + " > " + message );
       });
     }
@@ -114,12 +117,13 @@ export async function fetchPostInit(text) {
   try {
     const response = await axios.post(baseUrl, requestBody, requestHeaders);
     alert(response.data.message);
+    
   }catch(error) {
     if (!error.response) return alert('Invalid token or list not found!');
     const { data } = error.response;
 
-    if (!data.fields) return alert(data.title)
-    console.log(error.response)
+    if (!data.fields) return alert(data.title === undefined 
+      ? 'Invalid token or list not found!' : data.title)
 
     if (error) {
       data.fields.forEach(({ name, message }) => {
