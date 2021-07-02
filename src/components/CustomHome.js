@@ -13,7 +13,7 @@ const CustomHome = ({ id, text, author, upCount, downCount, createdAt, updateCou
   }
 
   useEffect(() => {
-    if (votes.length === 0 && !handler) setHandler(true);
+    /* if (votes.length === 0) */ setHandler(true);
     updateCount();
     upVotes();
   }, []);
@@ -59,7 +59,7 @@ const CustomHome = ({ id, text, author, upCount, downCount, createdAt, updateCou
               if (!up) handlerClickUp(postId);                
             } }
           >
-            { id === postId ? <i className={ up ? "thumbs up icon" 
+            { id === postId && !handler ? <i className={ up ? "thumbs up icon" 
             : "thumbs up outline icon" }></i> : ''  }
           </Link>          
         )) }
@@ -92,7 +92,7 @@ const CustomHome = ({ id, text, author, upCount, downCount, createdAt, updateCou
               if (!down) handlerClickDown(postId);                
             } }
           >
-            {id === postId ? <i className={ down ? "thumbs down icon" 
+            {id === postId && !handler ? <i className={ down ? "thumbs down icon" 
             : "thumbs down outline icon" }></i> : '' }
           </Link>
         )) }
