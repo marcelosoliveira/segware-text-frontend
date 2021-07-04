@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { saveToken, getToken } from '../helpers/localStorageHelper';
 
+const url = "https://segware-post.herokuapp.com"
 export async function fetchToken(username, password) {
-    const requestTokenUrl = 'http://localhost:8080/oauth/token';
+    const requestTokenUrl = `${url}/oauth/token`;
 
   const request = {  
     method: 'POST',
@@ -29,7 +30,7 @@ export async function fetchToken(username, password) {
 }
 
 export async function fetchSignUp(name, username, password) {
-  const signUpNewUserUrl = 'http://localhost:8080/api/v1/user';
+    const signUpNewUserUrl = `${url}/api/v1/user`;
 
   const requestBody = { 
     name,
@@ -59,7 +60,7 @@ export async function fetchSignUp(name, username, password) {
 }
 
 export async function fetchAllPost() {
-  const baseUrl = `http://localhost:8080/api/v1/post`;
+  const baseUrl = `${url}/api/v1/post`;
   const token = getToken();
 
   const request = {  
@@ -72,7 +73,7 @@ export async function fetchAllPost() {
 
   try {
     const response = await fetch(baseUrl, request);
-      return response.json();
+    return response.json()
   }catch(error) {
     if (error) return alert('Invalid token or list not found!');
   };
@@ -80,7 +81,7 @@ export async function fetchAllPost() {
 }
 
 export async function fetchUpVotes() {
-  const baseUrl = `http://localhost:8080/api/v1/userUpVotes`;
+  const baseUrl = `${url}/api/v1/userUpVotes`;
   const token = getToken();
 
   const request = {  
@@ -101,7 +102,7 @@ export async function fetchUpVotes() {
 }
 
 export async function fetchPostInit(text) {
-  const baseUrl = `http://localhost:8080/api/v1/post`;
+  const baseUrl = `${url}/api/v1/post`;
   const token = getToken();
   const requestHeaders = {
     headers: {
@@ -135,7 +136,7 @@ export async function fetchPostInit(text) {
 }
 
 export async function fetchPostVotes(postId, vote) {
-  const baseUrl = `http://localhost:8080/api/v1/post/${postId}/${vote}`;
+  const baseUrl = `${url}/api/v1/post/${postId}/${vote}`;
   const token = getToken();
   const requestHeaders = {
     method: 'POST',
@@ -146,12 +147,34 @@ export async function fetchPostVotes(postId, vote) {
   };
 
   try {
-    await fetch(baseUrl, requestHeaders);
+    const response = await fetch(baseUrl, requestHeaders);
+    return response;
   }catch(error) {
     if (!error.response) return alert('Invalid token or list not found!');
     const { data } = error.response;
 
     if (!data.fields) return alert(data.error_description);
+  };
+
+}
+
+export async function fetchUserId() {
+  const baseUrl = `${url}/api/v1/userId`;
+  const token = getToken();
+
+  const request = {  
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    },
+  };
+
+  try {
+    const response = await fetch(baseUrl, request);
+      return response.json();
+  }catch(error) {
+    if (error) return alert('Invalid token or list not found!');
   };
 
 }

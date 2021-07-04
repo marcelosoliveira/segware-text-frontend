@@ -1,31 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { fetchUpVotes, fetchPostVotes } from '../service/auth';
+import { useHistory } from 'react-router-dom';
+import { fetchUpVotes, fetchPostVotes, fetchUserId } from '../service/auth';
 import { Grid } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 const CustomHome = ({ id, text, author, upCount, downCount, createdAt, updateCount, votes }) => {
   const[voteState, setVoteState] = useState([]);
   const[handler, setHandler] = useState(false);
+  const history = useHistory();
   
   const upVotes = async () => {
   const data = await fetchUpVotes();
+  if (data.status === 401) history.push("/login");
   setVoteState(data)
   }
 
+  const requestUserId = async () => {
+    const idUser = await fetchUserId();
+    setHandler(true);
+    votes.map(({ userId: voteUserId }) => {
+      if (voteUserId === idUser) setHandler(false);
+    });
+  }
+
   useEffect(() => {
-    /* if (votes.length === 0) */ setHandler(true);
+    requestUserId()
     updateCount();
     upVotes();
   }, []);
 
   const handlerClickUp = async (postId) => {
-    await fetchPostVotes(postId, "up");
+    const response = await fetchPostVotes(postId, "up");
+    if (response.status === 401) history.push("/login");
     updateCount();
     upVotes();
   };
 
   const handlerClickDown = async(postId) => {
-    await fetchPostVotes(postId, "down");
+    const response = await fetchPostVotes(postId, "down");
+    if (response.status === 401) history.push("/login");
     updateCount();
     upVotes();
 };
@@ -33,7 +46,7 @@ const CustomHome = ({ id, text, author, upCount, downCount, createdAt, updateCou
   return (
     <Grid
       textAlign="center"
-      style={{ height: '25vh', lineHeight: 1 }}
+      style={{ lineHeight: 1 }}
       verticalAlign="middle"
     >    
       <Grid.Column style={{ maxWidth: 500 }}>
@@ -59,8 +72,8 @@ const CustomHome = ({ id, text, author, upCount, downCount, createdAt, updateCou
               if (!up) handlerClickUp(postId);                
             } }
           >
-            { id === postId && !handler ? <i className={ up ? "thumbs up icon" 
-            : "thumbs up outline icon" }></i> : ''  }
+            { id === postId ? <i className={ up ? "thumbs up icon" 
+            : "thumbs up outline icon" }></i> : '' }
           </Link>          
         )) }
 
@@ -92,8 +105,8 @@ const CustomHome = ({ id, text, author, upCount, downCount, createdAt, updateCou
               if (!down) handlerClickDown(postId);                
             } }
           >
-            {id === postId && !handler ? <i className={ down ? "thumbs down icon" 
-            : "thumbs down outline icon" }></i> : '' }
+            { id === postId ? <i className={ down ? "thumbs down icon" 
+            : "thumbs down outline icon" }></i> : ""}
           </Link>
         )) }
 
@@ -106,7 +119,7 @@ const CustomHome = ({ id, text, author, upCount, downCount, createdAt, updateCou
               handlerClickDown(id);
             } }                
             >
-            {handler ? <i className="thumbs down outline icon"></i> : '' }
+            {handler ?  <i className="thumbs down outline icon"></i> : '' }
           </Link>
         <span
           style={{ fontSize: 20, fontWeight: 600 }}
