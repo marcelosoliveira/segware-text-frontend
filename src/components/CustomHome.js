@@ -27,7 +27,7 @@ const CustomHome = ({ id, text, author, upCount, downCount, createdAt, updateCou
     requestUserId()
     updateCount();
     upVotes();
-  }, []);
+  }, [upVotes, updateCount]);
 
   const handlerClickUp = async (postId) => {
     const response = await fetchPostVotes(postId, "up");
