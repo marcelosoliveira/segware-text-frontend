@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { saveToken, getToken } from '../helpers/localStorageHelper';
 
-const url = "https://segware-post.herokuapp.com/"
+const url = "https://segware-post.herokuapp.com"
 export async function fetchToken(username, password) {
     const requestTokenUrl = `${url}/oauth/token`;
 
